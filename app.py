@@ -19,26 +19,25 @@ def save_post():
     content_receive = request.form['content_give']
 
     doc = {
-        'idx': db.posting.count() + 1,
         'title': title_receive,
         'content': content_receive,
         'reg_date': time.strftime('%Y-%m-%d', time.localtime(time.time())),
+        'idx': db.posting.count() + 1
     }
 
     db.posting.insert_one(doc)
-    return {"result": "success"}
-
+    return jsonify({'msg': 'success'})
 
 @app.route('/post', methods=['GET'])
 def get_post():
-    posts = list(db.posting.find({}, {'_id': False}))
-    return jsonify({'post_list': posts})
+    posts = list(db.posting.find({},{'_id': False}))
+    return jsonify({"post_list": posts})
 
-@app.route('/post/delete', methods=['DELETE'])
+@app.route('/post/delete', methods=['POST'])
 def delete_post():
     idx_receive = request.form['idx_give']
     db.posting.delete_one({'idx': idx_receive})
-    return jsonify({'msg': '삭제 완료'})
+    return jsonify({'msg': '삭제 완료!'})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
