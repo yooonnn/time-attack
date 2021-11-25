@@ -44,6 +44,67 @@
         }
     </style>
     <script>
+        // console.log("id=", response)
+
+        $(document).ready(function () {
+            idx = getParam('idx');
+            console.log(idx)
+            getArticle(idx);
+
+        })
+
+
+        function getParam(name) {
+            var results = new RegExp('[\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+            console.log(results)
+            return results[1] || 0;
+        }
+
+        function getArticle() {
+
+            $.ajax({
+                type: "GET",
+                url: `/view/${idx}`,
+                success: function (response) {
+                    console.log(response);
+
+                    $('#title').html(response['title']);
+                    $('#content').html(response['content']);
+                    $("#comment-list").empty();
+                    for (let i = 0; i < response['comments'].length; i++) {
+                        comment = response['comments'][i]
+                        let tempHtml = `<li class="list-group-item">${comment['comment']}</li>`
+                        $("#comment-list").append(tempHtml);
+                    }
+
+                }
+            })
+        }
+
+        function setArticleComment() {
+            let comment = {
+                "idx": idx,
+                "comment": $('#comment').val()
+            }
+
+            console.log(comment)
+
+            $.ajax({
+                type: "POST",
+                url: "/view/comment",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(comment),
+                success: function (response) {
+                    console.log(response)
+                    // if(confirm("저장된 메시지를 확인하시겠어요?")) {
+                    //     readArticle(response['id'])
+                    // }
+                    alert('댓글작성완료!');
+                    getArticle();
+
+                }
+            })
+        }
 
     </script>
 
@@ -65,7 +126,7 @@
     </div>
     <hr/>
     <textarea class="form-control" id="comment" rows="3"></textarea>
-    <button type="button" class="btn btn-primary" onclick="setArticleComment()">댓글작성</button>
+    <button type="button" class="btn btn-primary" onclick="setArticleComment();">댓글작성</button>
     <button type="button" class="btn btn-primary" onclick="location.href='/'">목록으로</button>
     <hr/>
     <ul class="list-group" id="comment-list">
