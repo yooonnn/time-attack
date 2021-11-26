@@ -73,7 +73,7 @@
                     $("#comment-list").empty();
                     for (let i = 0; i < response['comments'].length; i++) {
                         comment = response['comments'][i]
-                        let tempHtml = `<li class="list-group-item">${comment['comment']}</li>`
+                        let tempHtml = `<li>${comment}</li>`
                         $("#comment-list").append(tempHtml);
                     }
 

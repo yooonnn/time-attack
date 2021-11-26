@@ -102,12 +102,12 @@
                     for (let i = 0; i < response.length; i++) {
                         let idx = response[i]['idx']
                         let title = response[i]['title']
-                        let reCount = response[i]['reCount']
+                        let comments = response[i]['comments'].length
                         let createdAt = response[i]['createdAt']
                         let temp_html = `<tr>
                                             <td>${idx}</td>
                                             <td><a href="view.html?idx=${idx}">${title}</a></td>
-                                            <td>${reCount}</td>
+                                            <td>${comments}</td>
                                             <td>${createdAt}</td>
                                         </tr>`;
                         $('#list-post').append(temp_html);
